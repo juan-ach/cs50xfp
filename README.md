@@ -86,13 +86,15 @@ Dynamic HTML templates for the Flask app:
 ## How It Works
 
 1. **PyRevit Script Execution:**
+   - Install PyRevit, and then [install](https://pyrevitlabs.notion.site/Install-Extensions-0753ab78c0ce46149f962acc50892491) "CS50XFINALPROYECT.extension" inside "pyRevit Script" folder, in PyRevit
+   - Create or load a project, and make sure it has a name (Manage->Project Information->Building Name)
    - Run the script in Revit.
    - The script calculates areas for walls, floors, doors, and windows, or any others parameter of model's objects, but, for the sake of simplicity, i'll keep just this four parameters.
    - Updates the `const_elements` table in `model_quant.db`.
    - Syncs the database with the Flask app directory.
 
 2. **Flask Web Application:**
-   - Start the Flask app.
+   - Start the Flask app ("flask run" command in ".../flask app" folder and paste "http://127.0.0.1:5000" in your browser) and register a username with exactly the same choosen for "Building Name", and select a password.
    - Log in to access project data.
    - View quantities and calculate total costs based on unit prices.
 
