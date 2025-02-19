@@ -1,0 +1,65 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Your Project Information
+{% endblock %}
+{% block script %}
+<script type="module" src="/static/ifcjs/ifc-viewer-api.js"></script>
+{% endblock %}
+
+{% block main %}
+    <div>
+        <h3 class="text-start pb-4">
+          Hi, owner of Project: "{{ Project_Data[0].Proyect | capitalize}}"!
+        </h3>
+    </div>
+
+    <div id="threejs-container" style="width: 100%; height: 600px;"></div>
+
+    <script type="module">
+     import { IfcViewerAPI } from '/static/node_modules/web-ifc-viewer/dist/ifc-viewer-api.js';
+     import * as THREE from '/static/node_modules/three/build/three.module.js';
+
+      // Crear instancia del visor
+      const viewer = new IfcViewerAPI({ container: document.body });
+      viewer.axes.setAxes();
+      viewer.grid.setGrid();
+
+      // Manejar la carga de archivos
+      const fileInput = document.getElementById('file-input');
+      fileInput.addEventListener('change', async (event) => {
+          const file = event.target.files[0];
+          const fileURL = URL.createObjectURL(file);
+          await viewer.IFC.loadIfcUrl(fileURL);
+      });
+  </script>
+    
+
+    <table class="table table-hover table-bordered border-primary">
+        <thead>
+          <tr>
+            <th name="symbol" scope="col">Element</th>
+            <th name="quantity" scope="col">Quantity</th>
+            <th name="quantity" scope="col">Single Price</th>
+            <th name="quantity" scope="col">Element Total</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for element in Project_Data %}
+          <tr>
+            <td scope="row">{{ element.Element }}</td>
+            <td scope="row">{{ (element.Quantity | float) | surface }}</td> 
+            <td scope="row">{{ Prices[element.Element] | usd}}</td>
+            <td scope="row">{{ (element.Quantity | float * Prices[element.Element] | float) | usd }}</td>
+         </tr>
+         {% endfor %}
+        <tr>
+          <td colspan="3">Total</td>
+          <td scope="row">{{ total_sum | usd }}</td>  
+       </tr>
+        </tbody>
+    </table>
+     <p>Last Model Version: {{ time }} </p>
+{% endblock %}
+
+
